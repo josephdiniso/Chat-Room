@@ -32,8 +32,8 @@ def send_all(c,addr,msg):
                 client.send(msg.encode('utf-8'))
                 print('Sent!')
             except:
-                # client.close()
-                # remove(client)
+                client.close()
+                remove(client)
                 pass
     print('Sent to all clients')
 

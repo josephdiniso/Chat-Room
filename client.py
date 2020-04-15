@@ -20,6 +20,7 @@ def send_msg(s):
         sys.stdout.write("<You>") 
         sys.stdout.write(message) 
         sys.stdout.flush() 
+    s.close()
 
 def recv_msg(s):
     while True:
