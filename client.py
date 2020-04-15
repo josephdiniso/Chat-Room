@@ -11,7 +11,7 @@ port = 12345
   
 # connect to the server on local computer 
 userName = input('Enter your username: ')
-s.connect(('127.0.0.1', port)) 
+s.connect(('192.168.86.21', port)) 
 s.send(userName.encode('utf-8'))
 def send_msg(s):
     while(1):
