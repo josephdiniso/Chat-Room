@@ -4,20 +4,25 @@ import pickle
 import sys
 import select
 import threading
+
 # Create a socket object 
-s = socket.socket()          
+s = socket.socket()       
+
 # Define the port on which you want to connect 
 port = 12345                
   
 # connect to the server on local computer 
-userName = input('Enter your username: ')
-s.connect(('192.168.86.21', port)) 
+server_ipv4 = input("Servers IP Address:  ")        #'10.0.0.206'
+userName = input('Enter your username: ')           #Define user
+s.connect((server_ipv4, port))                     #connect to server ip address 
 s.send(userName.encode('utf-8'))
+
+#Send message to server
 def send_msg(s):
     while(1):
         message = sys.stdin.readline() 
         s.send(message.encode('utf-8')) 
-        sys.stdout.write("<You>") 
+        sys.stdout.write("<You> ") 
         sys.stdout.write(message) 
         sys.stdout.flush() 
     s.close()
