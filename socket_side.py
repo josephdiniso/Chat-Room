@@ -4,18 +4,14 @@ import threading
 import sys
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
 s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-
 print("Socket created")
-
 port = 12345
-
 s.bind(('', port))         
 print("socket binded to %s" %(port)) 
-  
- 
 s.listen(100)      
 print("socket is listening")  
 
+# Thread created for each connection to receive data to server
 def read_loop(c, addr):
     while(1):
         data = c.recv(4096)
@@ -23,6 +19,7 @@ def read_loop(c, addr):
             send_all(c,addr, data.decode('utf-8'))
         else:
             pass
+# Function to send received server message to all members except 
 def send_all(c,addr,msg):
     for client in clients:
         print('Trying to send')
