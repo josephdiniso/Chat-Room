@@ -6,14 +6,13 @@ s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)       #Creates TCP socket(
 s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 
 #Get server IP
-host_name = socket.gethostname()                        #returns the host name of the current system running server  
+#returns the host name of the current system running server
+host_name = ''
 server_IP_address = socket.gethostbyname(host_name)     #returns ip address of host
-server_IP_address = '34.231.214.96'
 print("Server Ipv4: " + server_IP_address)
-
 print("Socket created")
-
-port = 12345                                        #Establish port
+#Establish port
+port = 5555
 
 s.bind((server_IP_address, port))                #Designates ip as server ip address via bind         
 print("socket binded to %s" %(port)) 

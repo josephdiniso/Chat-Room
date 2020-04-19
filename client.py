@@ -9,7 +9,7 @@ import threading
 s = socket.socket()       
 
 # Define the port on which you want to connect 
-port = 12345                
+port = 5555           
   
 # connect to the server on local computer 
 server_ipv4 = input("Servers IP Address:  ")        #'10.0.0.206'
