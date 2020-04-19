@@ -2,16 +2,26 @@ import socket
 import pickle
 import threading
 import sys
-s = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)       #Creates TCP socket(IPv4)
 s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+
+#Get server IP
+host_name = socket.gethostname()                        #returns the host name of the current system running server  
+server_IP_address = socket.gethostbyname(host_name)     #returns ip address of host
+server_IP_address = '34.231.214.96'
+print("Server Ipv4: " + server_IP_address)
+
 print("Socket created")
-port = 12345
-s.bind(('', port))         
+
+port = 12345                                        #Establish port
+
+s.bind((server_IP_address, port))                #Designates ip as server ip address via bind         
 print("socket binded to %s" %(port)) 
-s.listen(100)      
+  
+s.listen(100)                           #prepares socket for accepting connectiooons
 print("socket is listening")  
 
-# Thread created for each connection to receive data to server
+#Recieve client data
 def read_loop(c, addr):
     while(1):
         data = c.recv(4096)
@@ -19,7 +29,8 @@ def read_loop(c, addr):
             send_all(c,addr, data.decode('utf-8'))
         else:
             pass
-# Function to send received server message to all members except 
+
+#Send data to clients
 def send_all(c,addr,msg):
     for client in clients:
         print('Trying to send')
@@ -44,7 +55,7 @@ addresses = {}
 while True: 
     # Establish connection with client. 
     c, addr = s.accept()
-    print(clients)
+    # print(clients)
     if(c not in clients):
         clientName = c.recv(4096)
         clients.append(c)
