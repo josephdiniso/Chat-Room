@@ -8,7 +8,6 @@ s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 #Get server IP
 host_name = socket.gethostname()                        #returns the host name of the current system running server  
 server_IP_address = socket.gethostbyname(host_name)     #returns ip address of host
-server_IP_address = '52.7.113.129'
 print("Server Ipv4: " + server_IP_address)
 #Establish port
 port = 5555
