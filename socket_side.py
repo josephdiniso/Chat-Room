@@ -34,7 +34,6 @@ def send_all(c,addr,msg):
         print('Trying to send')
         if(client!=c):
             try:
-                msg = "<"+addresses[addr]+">"+msg
                 client.send(msg.encode('utf-8'))
                 print('Sent!')
             except:
