@@ -18,7 +18,7 @@ s.bind((server_IP_address, port))
 print("socket binded to %s" %(port))
 #prepares socket for accepting connectiooons
 s.listen(100)
-print("socket is listening")  
+print("socket is listening")
 #Recieve client data
 def read_loop(c, addr):
     while(1):
@@ -34,6 +34,7 @@ def send_all(c,addr,msg):
         print('Trying to send')
         if(client!=c):
             try:
+                print(msg)
                 client.send(msg.encode('utf-8'))
                 print('Sent!')
             except:
