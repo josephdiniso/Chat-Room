@@ -2,6 +2,7 @@ import socket
 import pickle
 import threading
 import sys
+
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)       #Creates TCP socket(IPv4)
 s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 
@@ -12,12 +13,12 @@ print("Server Ipv4: " + server_IP_address)
 #Establish port
 port = 5555
 
-s.bind((server_IP_address, port))                #Designates ip as server ip address via bind         
-print("socket binded to %s" %(port)) 
-  
-s.listen(100)                           #prepares socket for accepting connectiooons
-print("socket is listening")  
-
+#Designates ip as server ip address via bind
+s.bind((server_IP_address, port))
+print("socket binded to %s" %(port))
+#prepares socket for accepting connectiooons
+s.listen(100)
+print("socket is listening")
 #Recieve client data
 def read_loop(c, addr):
     while(1):
@@ -33,7 +34,7 @@ def send_all(c,addr,msg):
         print('Trying to send')
         if(client!=c):
             try:
-                msg = "<"+addresses[addr]+">"+msg
+                print(msg)
                 client.send(msg.encode('utf-8'))
                 print('Sent!')
             except:
@@ -49,8 +50,8 @@ def remove(connection):
 threads = []
 clients = []
 addresses = {}
-while True: 
-    # Establish connection with client. 
+while True:
+    # Establish connection with client.
     c, addr = s.accept()
     # print(clients)
     if(c not in clients):
