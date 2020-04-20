@@ -5,6 +5,7 @@ import sys
 import select
 import threading
 import os
+import hashlib
 
 #Import tkinter class
 from tkinter import *           
@@ -27,13 +28,29 @@ class clientSocket():
             self.server_ipv4 = '34.231.214.96'
             print("Server_ipv4: ",self.server_ipv4)
 
-        #Define user
-        self.userName = input('Enter your username: ')
-        password = input('Enter your password: ')
         #connect to server ip address 
         self.s.connect((self.server_ipv4, self.port))
+        self.s.recv(4096)
+        self.userName = input('Enter yo username: ')
         self.s.send(self.userName.encode('utf-8'))
-        self.s.send(password.encode('utf-8'))
+        pass_salt = self.s.recv(4096)
+        password = input('Enter your password: ')
+        pass_hash = hashlib.pbkdf2_hmac('sha256', password.encode('utf-8'), pass_salt, 100000, dklen = 128)
+        self.s.send(pass_hash)
+
+        while(1):
+            if self.s.recv(4096).decode('utf-8') == 'connect':
+                print('Connected!')
+                break
+            print('looping')
+            self.s.recv(4096)
+            self.userName = input('Enter yo username: ')
+            self.s.send(self.userName.encode('utf-8'))
+            pass_salt = self.s.recv(4096)
+            password = input('Enter your password: ')
+            pass_hash = hashlib.pbkdf2_hmac('sha256', password.encode('utf-8'), pass_salt, 100000, dklen = 128)
+            self.s.send(pass_hash)
+
         threading.Thread(target=self.send_msg).start()
         threading.Thread(target=self.recv_msg).start()
         

@@ -4,6 +4,7 @@ import threading
 import sys
 import json
 import hashlib
+import os
 
 class hostServer():
     def __init__(self):
@@ -32,15 +33,22 @@ class hostServer():
         # Establish connection with client.
             c, addr = self.s.accept()
             if(c not in self.clients):
-                clientName = c.recv(4096)
                 self.clients.append(c)
-                self.addresses[addr] = clientName.decode('utf-8')
                 temp = threading.Thread(target=self.securityCheck, args=(c,addr))
                 temp.start()
     def securityCheck(self, c, addr):
-        # Receives original username from client
-        user_orig = c.recv(4096)
-        
+        passCorrect = False
+        #Allows three tries to connect with u & p before closing connection
+        for i in range(0,3):
+            if self.checkPass(c) == True:
+                c.send(b'connect')
+                passCorrect=True
+                t = threading.Thread(target = self.read_loop, args=(c,addr))
+                break
+            else:
+                c.send(b'Incorrect Password')
+        if passCorrect==False:
+            c.close()
 
     def read_loop(self, c, addr):
         while(1):
@@ -68,18 +76,20 @@ class hostServer():
     def remove(self, connection):
         if connection in self.clients: remove(self.clients)
     
-    def checkPass(self, c, user_orig, first):
-        c.send(b'Enter username: ')
-        user_name = c.recv(4096).decode('utf-8')
-        c.send(b'Enter password: ')
-        pass_string = c.recv(4096).decode('utf-8')
+    def checkPass(self, c):
         with open('users.txt') as json_file:
             data = json.load(json_file)
-        if pass_string in data:
+        c.send(b'Enter username: ')
+        user_name = c.recv(4096).decode('utf-8')
+
+        if(user_name in data):
+            c.send(data[user_name]['Pass Salt'].encode('latin-1'))
             pass_key = data[user_name]['Pass Hash']
+            pass_hash = c.recv(4096)
+            return pass_hash == pass_key.encode('latin-1')
         else:
+            c.send(os.urandom(32))
+            c.recv(4096)
             return False
-        pass_salt = data[user_name]['Pass Salt']
-        pass_hash = hashlib.pbkdf2_hmac('sha256', pass_string.encode('utf-8'), pass_salt.encode('latin-1'), 100000, dklen = 128)
-        return pass_hash == pass_key.encode('latin-1')
+
 host = hostServer()
