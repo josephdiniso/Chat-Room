@@ -5,27 +5,21 @@ import sys
 import select
 import threading
 
+#Import tkinter class
+from tkinter import *           
 
-# Create a socket object
-s = socket.socket()
 
-# Define the port on which you want to connect 
-port = 5555
-
-# connect to the server on local computer 
-server_ipv4 = input("Servers IP Address:  ")        #'10.0.0.206'
-userName = input('Enter your username: ')           #Define user
-s.connect((server_ipv4, port))                     #connect to server ip address 
-s.send(userName.encode('utf-8'))
-=======
 
 class clientSocket():
+    
     def __init__(self):
+        
         # Create a socket object 
         self.s = socket.socket()       
 
         # Define the port on which you want to connect 
         self.port = 5555
+
         # connect to the server on local computer 
         self.server_ipv4 = input("Servers IP Address, or enter 0 to use default server:  ")        #'10.0.0.206'
         if(self.server_ipv4=='0'):
@@ -34,6 +28,7 @@ class clientSocket():
 
         #Define user
         self.userName = input('Enter your username: ')
+
         #connect to server ip address 
         self.s.connect((self.server_ipv4, self.port))
         self.s.send(self.userName.encode('utf-8'))
@@ -62,4 +57,31 @@ class clientSocket():
             else:
                 pass
 
+
+
+
+class chatInterface:
+
+    def __init__(self, master):             #Occurs as soon as your create an object
+        top_frame = Frame(master)           #Frame for data
+        self.room_title = Label(text="Welcome to JB's Chat Room!", bg="gray")   
+        self.room_title.pack(side=TOP, fill=X)
+
+        self.print_button = Button(text="Click to be greeted", command=self.printMessage)
+        self.print_button.pack(side=BOTTOM)
+
+
+    def printMessage(self):
+        print("Welcome")
+
+
+#Create GUI object for chat room
+window = Tk()                                             #Creates blank window
+client_interface = chatInterface(window)                          #Need an object to do stuff in class
+
+
+#Create clientSocket() objext client1
 client1 = clientSocket()
+
+#Keeps window continuously on screen, hence main loop for the GUI 
+window.mainloop()                                         
