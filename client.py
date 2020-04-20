@@ -4,6 +4,7 @@ import pickle
 import sys
 import select
 import threading
+import os
 
 
 class clientSocket():
