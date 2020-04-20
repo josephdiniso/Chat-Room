@@ -29,10 +29,11 @@ class clientSocket():
 
         #Define user
         self.userName = input('Enter your username: ')
-
+        password = input('Enter your password: ')
         #connect to server ip address 
         self.s.connect((self.server_ipv4, self.port))
         self.s.send(self.userName.encode('utf-8'))
+        self.s.send(password.encode('utf-8'))
         threading.Thread(target=self.send_msg).start()
         threading.Thread(target=self.recv_msg).start()
         
